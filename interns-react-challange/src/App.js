@@ -1,10 +1,10 @@
-import logo from './logo.svg'
 import './App.css'
 import actors from './actors'
 import { FiArrowDownRight } from 'react-icons/fi'
 import { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
-import { IoMdArrowBack, IoMdArrowForward } from 'react-icons/io'
+import { useEffect } from 'react'
+import { transform } from 'framer-motion'
 
 function getActors() {
   return actors.map(
@@ -131,6 +131,7 @@ function Gallery({ imageUrls }) {
       {oneImage && (
         <img
           src={imageUrls[0]}
+          alt='character'
           className='max-w-full h-[500px] object-cover rounded-3'
         />
       )}
@@ -141,6 +142,7 @@ function Gallery({ imageUrls }) {
             <img
               key={i}
               src={imageUrl}
+              alt='character'
               className='
                 max-w-full h-[500px] object-cover snap-center'
             />
@@ -209,23 +211,46 @@ function ActorDetail({ actor, close }) {
   )
 }
 
-function Star({ x, y }) {
-  return (
-    <div
-      className='fixed w-[2px] h-[2px] bg-[#ffffffa2]'
-      style={{ left: `${x}%`, top: `${y}%` }}
-    ></div>
-  )
+function getStartPositions(count) {
+  const starPositions = []
+  for (let i = 0; i < count; i++) {
+    const x = Math.floor(Math.random() * 100)
+    const y = Math.floor(Math.random() * 200)
+    starPositions.push({ x, y })
+  }
+  return starPositions
 }
 
 function StarBackground() {
-  const stars = []
-  for (let i = 0; i < 100; i++) {
-    const x = Math.floor(Math.random() * 100)
-    const y = Math.floor(Math.random() * 100)
-    stars.push(<Star x={x} y={y} key={i} />)
-  }
-  return <>{stars}</>
+  const [offset, setOffset] = useState(0)
+  const [starPositions, setStarPositions] = useState(getStartPositions(100))
+
+  useEffect(() => {
+    const handleScroll = () => setOffset(-window.scrollY / 15)
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return (
+    <>
+      <div className='fixed top-0 left-0 right-0 bottom-0'>
+        <div className='relative w-full h-full transition-all'>
+          {starPositions.map(({ x, y }, i) => (
+            <div
+              className='absolute bg-white w-[2px] h-[2px]'
+              key={i}
+              style={{
+                left: `${x}%`,
+                top: `${y}%`,
+                transform: `translateY(${offset}px)`,
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
+    </>
+  )
 }
 
 function Hero() {
