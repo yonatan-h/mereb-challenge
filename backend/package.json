@@ -1,0 +1,19 @@
+{
+  "name": "mereb-challenge",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "data-maker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "n-readlines": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

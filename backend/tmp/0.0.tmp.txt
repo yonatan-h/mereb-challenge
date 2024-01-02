@@ -1,0 +1,20 @@
+Atlanta,104
+Baltimore,98
+Boston,95
+Chicago,89
+Dallas,97
+Denver,95
+Detroit,93
+Houston,91
+Los Angeles,89
+Miami,116
+Minneapolis,119
+New York,93
+Orlando,96
+Phoenix,120
+Portland,97
+San Diego,107
+San Francisco,106
+Seattle,94
+St. Louis,92
+Tampa,109

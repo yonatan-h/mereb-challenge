@@ -1,0 +1,20 @@
+Atlanta,2544
+Baltimore,2487
+Boston,2446
+Chicago,2489
+Dallas,2496
+Denver,2491
+Detroit,2537
+Houston,2458
+Los Angeles,2488
+Miami,2412
+Minneapolis,2485
+New York,2473
+Orlando,2555
+Phoenix,2545
+Portland,2540
+San Diego,2498
+San Francisco,2547
+Seattle,2503
+St. Louis,2498
+Tampa,2508
