@@ -2,14 +2,54 @@ import logo from './logo.svg'
 import './App.css'
 import actors from './actors'
 import { FiArrowDownRight } from 'react-icons/fi'
+import { useState } from 'react'
+import { IoMdClose } from 'react-icons/io'
+import { IoMdArrowBack, IoMdArrowForward } from 'react-icons/io'
 
 function getActors() {
   return actors.map(
-    ({ name, height, birth_year, url, vehicles, starships }) => {
+    ({
+      name,
+      height,
+      birth_year,
+      url,
+      gender,
+      homeworld,
+      films,
+      mass,
+      hair_color,
+      skin_color,
+    }) => {
+      const homeId = homeworld.match(/\d+/)[0]
+      const homeUrl = `https://starwars-visualguide.com/assets/img/planets/${homeId}.jpg`
+
       const id = url.match(/\d+/)[0]
       const imageUrl = `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`
+
+      const filmUrls = films.map((film) => {
+        const id = film.match(/\d+/)[0]
+        return `https://starwars-visualguide.com/assets/img/films/${id}.jpg`
+      })
+
+      if (gender === 'n/a') gender = null
+
+      const hairColor = hair_color
+      const skinColor = skin_color
+
       const birthYear = birth_year
-      return { name, height, birthYear, url, imageUrl, vehicles, starships }
+      return {
+        name,
+        height,
+        birthYear,
+        url,
+        imageUrl,
+        homeUrl,
+        filmUrls,
+        gender,
+        mass,
+        hairColor,
+        skinColor,
+      }
     }
   )
 }
@@ -22,43 +62,146 @@ function ActorList({ actors }) {
       grid-cols-1 md:grid-cols-3'
     >
       {actors.map((actor) => (
-        <ActorCard {...actor} key={actor.url} />
+        <ActorCard actor={actor} key={actor.url} />
       ))}
     </div>
   )
 }
 
-function ActorCard({ name, height, birthYear, imageUrl }) {
+function ActorCard({ actor }) {
+  const [showDetail, setShowDetail] = useState(false)
+
+  const { name, height, birthYear, imageUrl } = actor
   return (
-    <div
-      className='h-[500px] flex flex-col'
-    >
-      <div className='flex-1 relative overflow-hidden'>
-        <div
-          className='
+    <>
+      {showDetail && (
+        <ActorDetail actor={actor} close={() => setShowDetail(false)} />
+      )}
+      <div className='h-[500px] flex flex-col'>
+        <div className='flex-1 relative overflow-hidden'>
+          <div
+            className='
           absolute w-full h-full
           bg-gradient-to-b from-transparent to-black
         '
-        ></div>
-        <img src={imageUrl} alt={name} className='w-full h-full object-cover' />
+          ></div>
+          <img
+            src={imageUrl}
+            alt={name}
+            className='w-full h-full object-cover'
+          />
 
-        <div
-          className='
+          <div
+            className='
           absolute bottom-0 left-0 right-0
           flex flex-col gap-3 px-3
           text-[#ffffff9c]
         '
-        >
-          <h1 className='text-xl text-white'>{name}</h1>
+          >
+            <h1 className='text-xl text-white'>{name}</h1>
 
-          <div>
-            <p>Height: {height}</p>
-            <p>Birth Year: {birthYear}</p>
+            <div>
+              <p>{height} Feet Tall</p>
+              <p>Born In {birthYear}</p>
+            </div>
+            <div>
+              <button
+                onClick={() => setShowDetail(true)}
+                className='text-[#f3ff00] hover:text-[white]'
+              >
+                DETAIL
+              </button>
+            </div>
           </div>
-          <div>
-            <button className='text-[#f3ff00] hover:text-[white]'>
-              DETAIL
-            </button>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function Gallery({ imageUrls }) {
+  const noImage = imageUrls.length === 0
+  const oneImage = imageUrls.length === 1
+  const manyImages = imageUrls.length > 1
+
+  return (
+    <div>
+      {noImage && <hr />}
+
+      {oneImage && (
+        <img
+          src={imageUrls[0]}
+          className='max-w-full h-[500px] object-cover rounded-3'
+        />
+      )}
+
+      {manyImages && (
+        <div className='overflow-scroll flex gap-3 snap-x'>
+          {imageUrls.map((imageUrl, i) => (
+            <img
+              key={i}
+              src={imageUrl}
+              className='
+                max-w-full h-[500px] object-cover snap-center'
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ActorDetail({ actor, close }) {
+  const {
+    name,
+    height,
+    birthYear,
+    gender,
+    imageUrl,
+    filmUrls,
+    mass,
+    hairColor,
+    skinColor,
+  } = actor
+  return (
+    <div
+      className='
+      fixed z-10 top-0 left-0 w-screen h-screen 
+      backdrop-blur bg-[#00000085] p-[2rem]
+      flex flex-col overflow-y-scroll
+    '
+    >
+      <div
+        className='
+          flex-1 p-[2rem] bg-[black] 
+          max-w-[1000px] m-auto relative z-5
+        '
+      >
+        {/* x bar  */}
+        <div className='flex justify-end'>
+          <button onClick={() => close()}>
+            <IoMdClose className='text-white' />
+          </button>
+        </div>
+        {/* main content  */}
+        <div className='flex flex-col gap-12'>
+          {/* basic intro  */}
+          <div className='flex flex-col gap-12'>
+            <h2 className='text-white text-3xl'>{name}</h2>
+            <div className='flex flex-col gap-3'>
+              <div>
+                <p>{height} Feet Tall</p>
+                <p>Born In {birthYear}</p>
+                {gender && <p> {gender}</p>}
+              </div>
+              <div>
+                <p>Weighs {mass} pounds</p>
+                <p>Skin color is {skinColor}</p>
+                <p>Hair color is {hairColor}</p>
+              </div>
+            </div>
+
+            <Gallery imageUrls={[imageUrl, ...filmUrls]} />
           </div>
         </div>
       </div>
@@ -125,7 +268,7 @@ function App() {
   return (
     <>
       <StarBackground />
-      <main className='bg-black text-white p-[2rem]'>
+      <main className='bg-black text-[#ffffff9c] p-[2rem]'>
         <div
           className='
           max-w-[1000px] m-auto relative z-5
