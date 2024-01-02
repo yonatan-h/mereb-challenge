@@ -14,7 +14,7 @@ export default [
       'https://swapi.dev/api/films/2/',
       'https://swapi.dev/api/films/3/',
       'https://swapi.dev/api/films/6/',
-    ],
+    ], 
     species: [],
     vehicles: [
       'https://swapi.dev/api/vehicles/14/',
