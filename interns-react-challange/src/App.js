@@ -21,6 +21,11 @@ function getActors() {
       hair_color,
       skin_color,
     }) => {
+      const nullify = (value) => {
+        const isNullish = ['n/a', 'unknown'].includes(value)
+        return isNullish ? null : value
+      }
+
       const homeId = homeworld.match(/\d+/)[0]
       const homeUrl = `https://starwars-visualguide.com/assets/img/planets/${homeId}.jpg`
 
@@ -32,12 +37,13 @@ function getActors() {
         return `https://starwars-visualguide.com/assets/img/films/${id}.jpg`
       })
 
-      if (gender === 'n/a') gender = null
+      const hairColor = nullify(hair_color)
+      const skinColor = nullify(skin_color)
+      const birthYear = nullify(birth_year)
+      height = nullify(height)
+      mass = nullify(mass)
+      gender = nullify(gender)
 
-      const hairColor = hair_color
-      const skinColor = skin_color
-
-      const birthYear = birth_year
       return {
         name,
         height,
@@ -102,8 +108,13 @@ function ActorCard({ actor }) {
             <h1 className='text-xl text-white'>{name}</h1>
 
             <div>
-              <p>{height} Feet Tall</p>
-              <p>Born In {birthYear}</p>
+              {height ? <p>{height} Feet Tall</p> : <p>Height not known</p>}
+
+              {birthYear ? (
+                <p>Born In {birthYear}</p>
+              ) : (
+                <p>Birthdate not known</p>
+              )}
               <div>
                 <button
                   onClick={() => setShowDetail(true)}
@@ -135,14 +146,20 @@ function Gallery({ imageUrls }) {
     }
   }, [setIsDragging])
 
+  const extractX = ( e)=>{
+    if (e.clientX !== undefined) return e.clientX
+    else if (e.touches !== undefined) return e.touches[0]
+    else return 0
+  }
+
   const handleDragStart = (e) => {
     setIsDragging(true)
-    setContactX(e.clientX || e.touches[0].clientX)
+    setContactX(extractX(e))
   }
 
   const handleDrag = (e) => {
     if (!isDragging || !carousel.current) return
-    const newContactX = e.clientX || e.touches[0].clientX
+    const newContactX = extractX(e)
     const dx = newContactX - contactX
     setContactX(newContactX)
     carousel.current.scrollLeft -= dx
@@ -230,14 +247,30 @@ function ActorDetail({ actor, close }) {
           <div className='flex flex-col gap-6'>
             <h2 className='text-white text-3xl'>{name}</h2>
             <div>
-              <p>{height} Feet Tall</p>
-              <p>Born In {birthYear}</p>
-              {gender && <p> {gender}</p>}
+              {height ? <p>{height} Feet Tall</p> : <p>Height not known</p>}
+
+              {birthYear ? (
+                <p>Born In {birthYear}</p>
+              ) : (
+                <p>Unknown birthdate</p>
+              )}
+
+              {gender ? <p> {gender}</p> : <p>No gender</p>}
             </div>
             <div>
-              <p>Weighs {mass} pounds</p>
-              <p>Skin color is {skinColor}</p>
-              <p>Hair color is {hairColor}</p>
+              {mass ? <p>Weighs {mass} pounds</p> : <p>Unknown weight</p>}
+
+              {skinColor ? (
+                <p>Skin color is {skinColor}</p>
+              ) : (
+                <p>No skin color</p>
+              )}
+
+              {hairColor ? (
+                <p>Hair color is {hairColor}</p>
+              ) : (
+                <p>No hair color</p>
+              )}
             </div>
 
             <Gallery imageUrls={[imageUrl, ...filmUrls]} />
