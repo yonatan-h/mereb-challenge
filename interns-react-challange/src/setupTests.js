@@ -3,3 +3,10 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+
+
+//actor card shows name
+// test('actor card shows name', () => {
+//     render(<ActorCard actor={{name: 'abc'}}/>)
+//     expect(screen.getByText('abc')).toBeInTheDocument()
+// })
