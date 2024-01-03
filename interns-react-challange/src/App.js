@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import { useEffect } from 'react'
 import { transform } from 'framer-motion'
+import { useRef } from 'react'
 
 function getActors() {
   return actors.map(
@@ -120,6 +121,33 @@ function ActorCard({ actor }) {
 }
 
 function Gallery({ imageUrls }) {
+  const [contactX, setContactX] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const carousel = useRef(null)
+
+  useEffect(() => {
+    const endEvents = ['mouseup', 'mouseleave', 'touchend']
+    const handleDragEnd = () => setIsDragging(false)
+    endEvents.forEach((e) => window.addEventListener(e, handleDragEnd))
+
+    return () => {
+      endEvents.forEach((e) => window.removeEventListener(e, handleDragEnd))
+    }
+  }, [setIsDragging])
+
+  const handleDragStart = (e) => {
+    setIsDragging(true)
+    setContactX(e.clientX || e.touches[0].clientX)
+  }
+
+  const handleDrag = (e) => {
+    if (!isDragging || !carousel.current) return
+    const newContactX = e.clientX || e.touches[0].clientX
+    const dx = newContactX - contactX
+    setContactX(newContactX)
+    carousel.current.scrollLeft -= dx
+  }
+
   const noImage = imageUrls.length === 0
   const oneImage = imageUrls.length === 1
   const manyImages = imageUrls.length > 1
@@ -137,14 +165,23 @@ function Gallery({ imageUrls }) {
       )}
 
       {manyImages && (
-        <div className='overflow-scroll flex gap-3 snap-x'>
+        <div
+          className='overflow-scroll p-5 flex gap-3 cursor-pointer'
+          ref={carousel}
+          onMouseDown={handleDragStart}
+          onTouchStart={handleDragStart}
+          onMouseMove={handleDrag}
+          onTouchMove={handleDrag}
+        >
           {imageUrls.map((imageUrl, i) => (
             <img
+              className='
+                h-[500px] max-w-full object-cover
+                pointer-events-none
+                '
               key={i}
               src={imageUrl}
               alt='character'
-              className='
-                max-w-full h-[500px] object-cover snap-center'
             />
           ))}
         </div>
@@ -172,12 +209,14 @@ function ActorDetail({ actor, close }) {
       backdrop-blur bg-[#00000085] p-[2rem]
       flex flex-col overflow-y-scroll
     '
+      onClick={close}
     >
       <div
         className='
           flex-1 p-[2rem] bg-[black] 
           max-w-[1000px] m-auto relative z-5
         '
+        onClick={(e) => e.stopPropagation()}
       >
         {/* x bar  */}
         <div className='flex justify-end'>
