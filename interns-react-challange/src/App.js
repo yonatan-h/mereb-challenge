@@ -59,7 +59,7 @@ function ActorList({ actors }) {
   return (
     <div
       className='
-      bg-black grid gap-12
+      bg-black grid gap-6
       grid-cols-1 md:grid-cols-3'
     >
       {actors.map((actor) => (
@@ -95,7 +95,7 @@ function ActorCard({ actor }) {
           <div
             className='
           absolute bottom-0 left-0 right-0
-          flex flex-col gap-3 px-3
+          flex flex-col gap-3 px-6
           text-[#ffffff9c]
         '
           >
@@ -104,14 +104,14 @@ function ActorCard({ actor }) {
             <div>
               <p>{height} Feet Tall</p>
               <p>Born In {birthYear}</p>
-            </div>
-            <div>
-              <button
-                onClick={() => setShowDetail(true)}
-                className='text-[#f3ff00] hover:text-[white]'
-              >
-                DETAIL
-              </button>
+              <div>
+                <button
+                  onClick={() => setShowDetail(true)}
+                  className='text-[#f3ff00] hover:text-[white]'
+                >
+                  DETAIL
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -160,13 +160,13 @@ function Gallery({ imageUrls }) {
         <img
           src={imageUrls[0]}
           alt='character'
-          className='max-w-full h-[500px] object-cover rounded-3'
+          className='max-w-full h-[500px] object-cover'
         />
       )}
 
       {manyImages && (
         <div
-          className='overflow-scroll p-5 flex gap-3 cursor-pointer'
+          className='overflow-scroll flex gap-6 cursor-pointer'
           ref={carousel}
           onMouseDown={handleDragStart}
           onTouchStart={handleDragStart}
@@ -176,8 +176,8 @@ function Gallery({ imageUrls }) {
           {imageUrls.map((imageUrl, i) => (
             <img
               className='
-                h-[500px] max-w-full object-cover
-                pointer-events-none
+                  h-[500px] flex-shrink-0 object-cover
+                  pointer-events-none
                 '
               key={i}
               src={imageUrl}
@@ -206,14 +206,14 @@ function ActorDetail({ actor, close }) {
     <div
       className='
       fixed z-10 top-0 left-0 w-screen h-screen 
-      backdrop-blur bg-[#00000085] p-[2rem]
+      backdrop-blur bg-[#00000085] p-6
       flex flex-col overflow-y-scroll
     '
       onClick={close}
     >
       <div
         className='
-          flex-1 p-[2rem] bg-[black] 
+          flex-1 p-6 bg-[black] 
           max-w-[1000px] m-auto relative z-5
         '
         onClick={(e) => e.stopPropagation()}
@@ -225,21 +225,19 @@ function ActorDetail({ actor, close }) {
           </button>
         </div>
         {/* main content  */}
-        <div className='flex flex-col gap-12'>
+        <div className='flex flex-col gap-6'>
           {/* basic intro  */}
-          <div className='flex flex-col gap-12'>
+          <div className='flex flex-col gap-6'>
             <h2 className='text-white text-3xl'>{name}</h2>
-            <div className='flex flex-col gap-3'>
-              <div>
-                <p>{height} Feet Tall</p>
-                <p>Born In {birthYear}</p>
-                {gender && <p> {gender}</p>}
-              </div>
-              <div>
-                <p>Weighs {mass} pounds</p>
-                <p>Skin color is {skinColor}</p>
-                <p>Hair color is {hairColor}</p>
-              </div>
+            <div>
+              <p>{height} Feet Tall</p>
+              <p>Born In {birthYear}</p>
+              {gender && <p> {gender}</p>}
+            </div>
+            <div>
+              <p>Weighs {mass} pounds</p>
+              <p>Skin color is {skinColor}</p>
+              <p>Hair color is {hairColor}</p>
             </div>
 
             <Gallery imageUrls={[imageUrl, ...filmUrls]} />
@@ -306,7 +304,7 @@ function Hero() {
       <div className='outline outline-1 outline-[#4141417a]'></div>
       <h1
         className='
-        outline outline-2 outline-[#414141] p-[2rem] bg-black
+        outline outline-2 outline-[#414141] p-6 bg-black
         text-4xl text-[#f3ff00] font-[600] text-center font-poller
         absolute top-[50%] left-[50%] transofrm translate-x-[-50%] translate-y-[-50%]
       '
@@ -316,7 +314,7 @@ function Hero() {
 
       <div
         className='
-        w-5 h-5 bg-white transform rotate-45
+        w-6 h-6 bg-white transform rotate-45
         transofrm translate-x-[-50%] translate-y-[-50%]
         absolute bottom-[10%] left-[50%]
         flex items-center justify-center
@@ -332,11 +330,11 @@ function App() {
   return (
     <>
       <StarBackground />
-      <main className='bg-black text-[#ffffff9c] p-[2rem]'>
+      <main className='bg-black text-[#ffffff9c] p-6'>
         <div
           className='
           max-w-[1000px] m-auto relative z-5
-          flex flex-col gap-12
+          flex flex-col gap-6
         '
         >
           <Hero />
