@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "data-maker.js",
+  "main": "index.js",
   "scripts": {
+    "start":"node src/index.js",
+    "generate":"node  src/generate.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

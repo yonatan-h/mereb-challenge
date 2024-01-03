@@ -1,7 +1,9 @@
 import fs from 'fs'
+import { inputFilePath } from './utils.js'
+import path from 'path'
 
 function generateCSV(iterations) {
-  const filePath = './data.txt'
+  console.log('generating csv input file')
   const bufferSize = 1_000_000
 
   let buffer = []
@@ -29,7 +31,8 @@ function generateCSV(iterations) {
     'Portland',
   ]
 
-  fs.writeFileSync(filePath, '')
+  fs.writeFileSync(inputFilePath, '')
+
   for (let i = 0; i < iterations; i++) {
     const randomIndex = Math.floor(Math.random() * departments.length)
     const department = departments[randomIndex]
@@ -37,22 +40,25 @@ function generateCSV(iterations) {
 
     if (i > 0 && i % bufferSize === 0) {
       const file = buffer.join('')
-      fs.writeFileSync(filePath, file, { flag: 'a' })
+      fs.writeFileSync(inputFilePath, file, { flag: 'a' })
+      console.log(`appended chunk input ...`)
       buffer = []
     }
   }
   const file = buffer.join('')
-  fs.writeFileSync(filePath, file, { flag: 'a' })
+  fs.writeFileSync(inputFilePath, file, { flag: 'a' })
+  console.log('finished generating csv input file')
 }
 
 //20 bytes per line
-const tenGBLines = 500_000_000 // =~ 10GB file
+const fiveGBLines = 250_000_000 // =~ 5GB file
 const oneGBLines = 50_000_000 // =~ 1GB file
 const oneMBLines = 50_000 // =~ 1mb file
 const twoThousandLines = 2000 // =~ 40kb file
-const tenLines = 10
-//generateCSV(tenGBLines)
-// generateCSV(oneGBLines)
-// generateCSV(oneMBLines)
- generateCSV(twoThousandLines)
-// generateCSV(tenLines)
+const twentyLines = 20
+
+//generateCSV(fiveGBLines)
+//generateCSV(oneGBLines)
+generateCSV(oneMBLines)
+// generateCSV(twoThousandLines)
+//generateCSV(twentyLines)
